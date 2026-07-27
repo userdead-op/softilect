@@ -3,27 +3,62 @@
 import { FormEvent, useState } from "react";
 import { PageHero } from "@/components/ui/PageHero";
 import { GreenShadeLayers } from "@/components/ui/GreenShadeLayers";
+import { isValidPhone, PHONE_PATTERN } from "@/lib/phone";
+import { cn } from "@/lib/cn";
 
 export default function ContactPage() {
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [phoneError, setPhoneError] = useState<string | null>(null);
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const data = new FormData(e.currentTarget);
-    const name = String(data.get("name") || "").trim();
-    const email = String(data.get("email") || "").trim();
-    const company = String(data.get("company") || "").trim();
-    const brief = String(data.get("brief") || "").trim();
+    setError(null);
+    setPhoneError(null);
 
-    const subject = encodeURIComponent(
-      `Softilect project brief${company ? ` · ${company}` : ""}`,
-    );
-    const body = encodeURIComponent(
-      `Name: ${name}\nEmail: ${email}\nCompany: ${company || "N/A"}\n\nBrief:\n${brief}`,
-    );
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    const phone = String(data.get("phone") || "").trim();
 
-    window.location.href = `mailto:hello@softilect.com?subject=${subject}&body=${body}`;
-    setSent(true);
+    if (!isValidPhone(phone)) {
+      setPhoneError(
+        "Enter a valid phone number (7–15 digits; + and spaces allowed).",
+      );
+      return;
+    }
+
+    setSending(true);
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          name: String(data.get("name") || "").trim(),
+          email: String(data.get("email") || "").trim(),
+          phone,
+          company: String(data.get("company") || "").trim(),
+          brief: String(data.get("brief") || "").trim(),
+          website: String(data.get("website") || "").trim(),
+        }),
+      });
+
+      const payload = (await res.json().catch(() => ({}))) as {
+        error?: string;
+      };
+
+      if (!res.ok) {
+        throw new Error(payload.error || "Could not send your brief.");
+      }
+
+      setSent(true);
+      form.reset();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not send your brief.");
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -57,7 +92,7 @@ export default function ContactPage() {
 
           <form
             onSubmit={onSubmit}
-            className="border border-ink/10 bg-bg p-6 md:p-10"
+            className="relative border border-ink/10 bg-bg p-6 md:p-10"
           >
             {sent ? (
               <div className="py-16 text-center">
@@ -65,23 +100,38 @@ export default function ContactPage() {
                   Transmission received
                 </p>
                 <h2 className="display mt-4 text-3xl md:text-4xl">
-                  Thanks, your email draft is ready.
+                  Thanks — your brief is on its way.
                 </h2>
                 <p className="mt-4 text-muted">
-                  If your mail app did not open, write us at{" "}
-                  <a
+                  We received your message and will get back to you ASAP.{" "}
+                  {/* <a
                     href="mailto:hello@softilect.com"
                     className="text-signal underline-offset-2 hover:underline"
                   >
                     hello@softilect.com
-                  </a>
-                  .
+                  </a> */}
+                  
                 </p>
               </div>
             ) : (
               <div className="space-y-6">
                 <Field label="Name" name="name" required />
                 <Field label="Email" name="email" type="email" required />
+                <Field
+                  label="Phone"
+                  name="phone"
+                  type="tel"
+                  required
+                  inputMode="tel"
+                  autoComplete="tel"
+                  pattern={PHONE_PATTERN}
+                  placeholder="+1 (555) 123-4567"
+                  title="Use 7–15 digits. Optional +, spaces, dashes, or parentheses."
+                  error={phoneError}
+                  onChange={() => {
+                    if (phoneError) setPhoneError(null);
+                  }}
+                />
                 <Field label="Company" name="company" />
                 <label className="block">
                   <span className="mono text-[10px] text-muted">
@@ -95,13 +145,28 @@ export default function ContactPage() {
                     placeholder="What are you building, and what does success look like?"
                   />
                 </label>
+                {/* Honeypot */}
+                <input
+                  type="text"
+                  name="website"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  className="absolute left-[-9999px] h-0 w-0 opacity-0"
+                  aria-hidden
+                />
+                {error ? (
+                  <p className="text-sm text-ember" role="alert">
+                    {error}
+                  </p>
+                ) : null}
                 <button
                   type="submit"
-                  className="group btn-green-shade display relative w-full overflow-hidden px-6 py-4"
+                  disabled={sending}
+                  className="group btn-green-shade display relative w-full overflow-hidden px-6 py-4 disabled:cursor-wait disabled:opacity-70"
                 >
                   <GreenShadeLayers />
                   <span className="relative z-10 text-bg-deep transition-colors duration-500 delay-300 group-hover:text-bg-mist">
-                    Send the brief →
+                    {sending ? "Sending…" : "Send the brief →"}
                   </span>
                 </button>
               </div>
@@ -118,11 +183,25 @@ function Field({
   name,
   type = "text",
   required,
+  inputMode,
+  autoComplete,
+  pattern,
+  placeholder,
+  title,
+  error,
+  onChange,
 }: {
   label: string;
   name: string;
   type?: string;
   required?: boolean;
+  inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
+  autoComplete?: string;
+  pattern?: string;
+  placeholder?: string;
+  title?: string;
+  error?: string | null;
+  onChange?: () => void;
 }) {
   return (
     <label className="block">
@@ -131,8 +210,23 @@ function Field({
         name={name}
         type={type}
         required={required}
-        className="mt-2 w-full border border-ink/15 bg-transparent px-4 py-3 text-ink outline-none transition-colors focus:border-signal"
+        inputMode={inputMode}
+        autoComplete={autoComplete}
+        pattern={pattern}
+        placeholder={placeholder}
+        title={title}
+        onChange={onChange}
+        aria-invalid={error ? true : undefined}
+        className={cn(
+          "mt-2 w-full border bg-transparent px-4 py-3 text-ink outline-none transition-colors focus:border-signal",
+          error ? "border-ember" : "border-ink/15",
+        )}
       />
+      {error ? (
+        <span className="mt-2 block text-sm text-ember" role="alert">
+          {error}
+        </span>
+      ) : null}
     </label>
   );
 }
