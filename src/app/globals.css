@@ -1,0 +1,344 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #eef2f5;
+  --bg-deep: #0b1218;
+  --bg-mist: #f5f7f9;
+  --ink: #101820;
+  --ink-soft: #3a4654;
+  --muted: #6b7785;
+  --line: rgba(16, 24, 32, 0.12);
+  --line-soft: rgba(16, 24, 32, 0.06);
+  --signal: #1f8a70;
+  --signal-bright: #2ec4a0;
+  --ember: #e4572e;
+  --sand: #d9c3a3;
+  --surface: rgba(255, 255, 255, 0.72);
+  --surface-deep: rgba(255, 255, 255, 0.04);
+  --glow: rgba(46, 196, 160, 0.22);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-deep: var(--bg-deep);
+  --color-bg-mist: var(--bg-mist);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-signal: var(--signal);
+  --color-signal-bright: var(--signal-bright);
+  --color-ember: var(--ember);
+  --color-sand: var(--sand);
+  --font-sans: var(--font-figtree);
+  --font-display: var(--font-syne);
+  --font-mono: var(--font-jetbrains);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+  background: transparent;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-figtree), Georgia, serif;
+  overflow-x: clip;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--signal-bright) 40%, white);
+  color: var(--ink);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.noise {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  opacity: 0.03;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.display {
+  font-family: var(--font-syne), sans-serif;
+  letter-spacing: -0.04em;
+  line-height: 0.92;
+}
+
+.mono {
+  font-family: var(--font-jetbrains), monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.story-progress-track {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  z-index: 60;
+  overflow: visible;
+  background: rgba(16, 24, 32, 0.08);
+}
+
+.story-progress-bar {
+  height: 100%;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: left center;
+  background: linear-gradient(90deg, var(--signal-bright), var(--signal), var(--ember));
+  box-shadow: 0 0 18px rgba(46, 196, 160, 0.45);
+  will-change: transform, filter;
+}
+
+.story-progress-tip {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, #fff 0%, var(--signal-bright) 45%, transparent 72%);
+  box-shadow: 0 0 16px rgba(46, 196, 160, 0.85);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.mesh-hero {
+  background:
+    radial-gradient(ellipse 80% 60% at 70% 20%, rgba(46, 196, 160, 0.28), transparent 55%),
+    radial-gradient(ellipse 50% 45% at 15% 80%, rgba(228, 87, 46, 0.16), transparent 50%),
+    radial-gradient(ellipse 40% 35% at 85% 75%, rgba(217, 195, 163, 0.35), transparent 45%),
+    linear-gradient(165deg, #f7f9fb 0%, #e8eef3 48%, #dfe8ef 100%);
+}
+
+.mesh-deep {
+  background:
+    radial-gradient(ellipse 70% 50% at 80% 10%, rgba(46, 196, 160, 0.18), transparent 55%),
+    radial-gradient(ellipse 50% 40% at 10% 90%, rgba(228, 87, 46, 0.12), transparent 50%),
+    linear-gradient(180deg, #0b1218 0%, #121c26 55%, #0b1218 100%);
+}
+
+.grid-fade {
+  background-image:
+    linear-gradient(to right, rgba(16, 24, 32, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(16, 24, 32, 0.05) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black, transparent);
+}
+
+.grid-fade-deep {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black, transparent);
+}
+
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.55;
+  }
+  70% {
+    transform: scale(1.15);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.15);
+    opacity: 0;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-reverse {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes wipe-down {
+  from {
+    transform: translateY(-101%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes wipe-up {
+  from {
+    transform: translateY(101%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes blend-final {
+  from {
+    opacity: 0;
+    transform: scale(1.04);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-float {
+  animation: float-y 7s ease-in-out infinite;
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 2.8s ease-out infinite;
+}
+
+.marquee-track {
+  animation: marquee 28s linear infinite;
+}
+
+.marquee-track-reverse {
+  animation: marquee-reverse 34s linear infinite;
+}
+
+.btn-green-shade {
+  position: relative;
+  overflow: hidden;
+  background-color: #5eecc4;
+  isolation: isolate;
+}
+
+.btn-shade {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Shade 2: top → bottom */
+.btn-shade-down {
+  background-color: #45dfb8;
+  transform: translateY(-101%);
+}
+
+.group:hover .btn-shade-down,
+.group:focus-visible .btn-shade-down,
+.btn-green-shade:hover .btn-shade-down,
+.btn-green-shade:focus-visible .btn-shade-down {
+  animation: wipe-down 0.34s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Shade 3: bottom → top */
+.btn-shade-up {
+  background-color: #2ec4a0;
+  transform: translateY(101%);
+}
+
+.group:hover .btn-shade-up,
+.group:focus-visible .btn-shade-up,
+.btn-green-shade:hover .btn-shade-up,
+.btn-green-shade:focus-visible .btn-shade-up {
+  animation: wipe-up 0.34s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
+}
+
+/* Final shade: blend in */
+.btn-shade-blend {
+  background-color: #1f8a70;
+  opacity: 0;
+  transform: scale(1.04);
+}
+
+.group:hover .btn-shade-blend,
+.group:focus-visible .btn-shade-blend,
+.btn-green-shade:hover .btn-shade-blend,
+.btn-green-shade:focus-visible .btn-shade-blend {
+  animation: blend-final 0.4s ease-out 0.58s forwards;
+}
+
+.btn-green-shade:active {
+  background-color: #145c4a;
+}
+
+.btn-green-shade:active .btn-shade {
+  animation: none;
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-float,
+  .animate-pulse-ring,
+  .marquee-track,
+  .marquee-track-reverse {
+    animation: none;
+  }
+
+  .btn-green-shade:hover,
+  .btn-green-shade:focus-visible {
+    background-color: #1f8a70;
+  }
+
+  .group:hover .btn-shade,
+  .btn-green-shade:hover .btn-shade {
+    animation: none;
+  }
+
+  .group:hover .btn-shade-blend,
+  .btn-green-shade:hover .btn-shade-blend {
+    opacity: 1;
+    transform: none;
+  }
+}
