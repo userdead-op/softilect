@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { MagneticButton } from "@/components/ui/MagneticButton";
@@ -49,42 +50,45 @@ export function HeroStory() {
   return (
     <section
       ref={root}
-      className="relative flex min-h-[100svh] flex-col justify-end overflow-hidden mesh-hero pb-16 pt-28 md:pb-24 md:pt-32"
+      className="relative flex min-h-[100svh] flex-col justify-center overflow-hidden mesh-hero pb-14 pt-24 md:pb-16 md:pt-28 xl:pb-20"
     >
       <div className="pointer-events-none absolute inset-0 grid-fade" />
 
-      <div className="hero-orb absolute left-[8%] top-[22%] h-40 w-40 rounded-full bg-signal-bright/25 blur-3xl animate-float" />
+      <div className="hero-orb absolute left-[8%] top-[18%] h-40 w-40 rounded-full bg-signal-bright/25 blur-3xl animate-float xl:h-56 xl:w-56 2xl:h-72 2xl:w-72" />
       <div
-        className="hero-orb absolute right-[12%] top-[30%] h-56 w-56 rounded-full bg-ember/20 blur-3xl animate-float"
+        className="hero-orb absolute right-[10%] top-[28%] h-56 w-56 rounded-full bg-ember/20 blur-3xl animate-float xl:h-72 xl:w-72 2xl:h-96 2xl:w-96"
         style={{ animationDelay: "1.4s" }}
       />
 
-      <div className="relative z-10 mx-auto grid w-full max-w-7xl gap-12 px-5 md:grid-cols-[1.15fr_0.85fr] md:items-end md:px-8">
-        <div>
+      <div className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-10 px-5 md:grid-cols-[1.1fr_0.9fr] md:gap-12 md:px-8 xl:max-w-[90rem] xl:gap-16 2xl:max-w-[100rem] 2xl:gap-20">
+        <div className="min-w-0">
           <div className="overflow-hidden">
-            <p className="hero-brand display text-[clamp(3.4rem,12vw,8.5rem)] text-ink">
+            <p className="hero-brand display text-[clamp(3.4rem,8.5vw,11rem)] text-ink">
               Softilect
             </p>
           </div>
 
-          <h1 className="mt-4 max-w-3xl">
+          <h1 className="mt-4 max-w-4xl 2xl:mt-6">
             <span className="block overflow-hidden">
-              <span className="hero-line display block text-[clamp(1.7rem,4.6vw,3.4rem)] text-ink-soft">
+              <span className="hero-line display block text-[clamp(1.7rem,3.4vw,4.5rem)] text-ink-soft">
                 Code with a pulse.
               </span>
             </span>
             <span className="block overflow-hidden">
-              <span className="hero-line display block text-[clamp(1.7rem,4.6vw,3.4rem)] text-ink">
+              <span className="hero-line display block text-[clamp(1.7rem,3.4vw,4.5rem)] text-ink">
                 Products with a premiere.
               </span>
             </span>
           </h1>
 
-          <p className="hero-sub mt-6 max-w-lg text-base leading-relaxed text-muted md:text-lg">
-            Powering your growth with Softilect, an end-to-end Development partner pioneered in AI, Web3, Web, and Mobile applications. We handle everything from YOUR raw ideations till final commit, enabling successful launches for your Products.
+          <p className="hero-sub mt-6 max-w-lg text-base leading-relaxed text-muted md:text-lg 2xl:mt-8 2xl:max-w-xl 2xl:text-xl">
+            Powering your growth with Softilect, an end-to-end Development
+            partner pioneered in AI, Web3, Web, and Mobile applications. We
+            handle everything from YOUR raw ideations till final commit,
+            enabling successful launches for your Products.
           </p>
 
-          <div className="hero-cta mt-9 flex flex-wrap gap-3">
+          <div className="hero-cta mt-9 flex flex-wrap gap-3 2xl:mt-11">
             <MagneticButton href="/contact">Begin the story</MagneticButton>
             <MagneticButton href="/work" variant="ghost">
               Hop in Techseum
@@ -92,17 +96,23 @@ export function HeroStory() {
           </div>
         </div>
 
-        <div className="hero-visual relative aspect-[4/5] w-full max-w-md justify-self-end overflow-hidden md:max-w-none">
-          <div className="absolute inset-0 bg-gradient-to-br from-ink via-[#163049] to-signal" />
-          <div className="absolute inset-0 opacity-40 mix-blend-screen">
-            <div className="absolute -left-10 top-10 h-48 w-48 rounded-full bg-signal-bright blur-2xl animate-float" />
-            <div className="absolute bottom-8 right-0 h-56 w-56 rounded-full bg-ember blur-3xl" />
-          </div>
-          <div className="absolute inset-6 border border-white/15" />
-          <div className="absolute inset-0 flex flex-col justify-between p-8 text-bg-mist">
+        <div className="hero-visual relative mx-auto aspect-[4/5] w-full max-w-md overflow-hidden md:mx-0 md:h-[min(68vh,40rem)] md:w-auto md:max-w-full md:justify-self-end xl:h-[min(70vh,48rem)] 2xl:h-[min(72vh,56rem)]">
+          <Image
+            src="/hero/hero-desk-code.png"
+            alt="Engineering workstation with code on screen and a computer system on the desk"
+            fill
+            priority
+            sizes="(max-width: 768px) 100vw, (max-width: 1536px) 40vw, 32vw"
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-ink/55 via-transparent to-ink/25" />
+          <div className="absolute inset-5 border border-white/15 xl:inset-6" />
+          <div className="absolute inset-0 flex flex-col justify-between p-7 text-bg-mist xl:p-9 2xl:p-10">
             <div>
-              <p className="mono text-[10px] text-signal-bright">Scene 01</p>
-              <p className="display mt-3 text-3xl tracking-[-0.04em] md:text-4xl">
+              <p className="mono text-[10px] text-signal-bright 2xl:text-[11px]">
+                Scene 01
+              </p>
+              <p className="display mt-3 text-3xl tracking-[-0.04em] md:text-4xl xl:text-5xl 2xl:text-6xl">
                 From brief
                 <br />
                 to product
@@ -110,8 +120,8 @@ export function HeroStory() {
                 premiere.
               </p>
             </div>
-            <div className="flex items-end justify-between">
-              <p className="max-w-[12rem] text-sm text-bg-mist/70">
+            <div className="flex items-end justify-between gap-4">
+              <p className="max-w-[12rem] text-sm text-bg-mist/70 2xl:max-w-[14rem] 2xl:text-base">
                 Scroll to enter how we build.
               </p>
               <div className="relative flex h-12 w-12 items-center justify-center">

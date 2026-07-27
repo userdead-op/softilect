@@ -48,13 +48,16 @@ export function Header() {
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-40 transition-all duration-500",
-        scrolled || open
-          ? "border-b border-ink/8 bg-bg/85 backdrop-blur-xl"
-          : "bg-transparent",
+        "fixed inset-x-0 top-0 z-40 border-b transition-all duration-500",
+        "backdrop-blur-2xl backdrop-saturate-150",
+        "before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-white/60 before:to-transparent",
+        "after:pointer-events-none after:absolute after:inset-0 after:bg-gradient-to-b after:from-white/25 after:to-transparent after:opacity-60",
+        lightChrome
+          ? "border-white/15 bg-bg-deep/50 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.14)]"
+          : "border-white/35 bg-bg/50 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.55),0_8px_32px_rgba(16,24,32,0.06)]",
       )}
     >
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 md:h-20 md:px-8">
+      <div className="relative z-10 mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-5 md:h-20 md:px-8 xl:max-w-[90rem] 2xl:max-w-[100rem]">
         <Link
           href="/"
           onClick={closeMenu}
