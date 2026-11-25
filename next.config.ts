@@ -5,6 +5,13 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       // One canonical host: send www traffic to the bare domain.
+      // The root needs its own rule: on Workers an empty :path* is passed through literally.
+      {
+        source: "/",
+        has: [{ type: "host", value: "www.softilect.com" }],
+        destination: "https://softilect.com/",
+        permanent: true,
+      },
       {
         source: "/:path*",
         has: [{ type: "host", value: "www.softilect.com" }],
