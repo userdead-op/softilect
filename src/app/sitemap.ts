@@ -1,10 +1,11 @@
 import type { MetadataRoute } from "next";
 import { projects } from "@/data/projects";
+import { SITE_UPDATED } from "@/lib/site";
 import { services } from "@/data/services";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = "https://softilect.com";
-  const now = new Date();
+  const now = new Date(SITE_UPDATED);
 
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: base, lastModified: now, changeFrequency: "weekly", priority: 1 },
@@ -13,6 +14,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: now,
       changeFrequency: "weekly",
       priority: 0.95,
+    },
+    {
+      url: `${base}/process`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.8,
     },
     {
       url: `${base}/work`,

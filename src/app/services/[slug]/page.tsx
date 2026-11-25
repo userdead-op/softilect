@@ -7,6 +7,12 @@ import { ClosingCta } from "@/components/ui/ClosingCta";
 import { WorkCard } from "@/components/ui/WorkCard";
 import { Arrow } from "@/components/ui/Icons";
 import { BreadcrumbJsonLd, JsonLd } from "@/components/seo/JsonLd";
+import { Approach, BuildRows, ToolStack } from "@/components/services/ServiceDeep";
+import { Faq } from "@/components/services/Faq";
+import { Timeline } from "@/components/services/Timeline";
+import { Ribbon } from "@/components/ui/Ribbon";
+import { ServiceVisual, hasServiceVisual } from "@/components/services/ServiceVisual";
+import { serviceDeep } from "@/data/serviceDeep";
 import { getProject } from "@/data/projects";
 import { getService, services, serviceCategories } from "@/data/services";
 import { SITE_URL } from "@/lib/site";
@@ -21,12 +27,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const service = getService(slug);
   if (!service) return {};
-  const title = service.seoTitle.replace(/\s*\|\s*Softilect$/, "");
+  const deep = serviceDeep[slug];
+  const title = deep ? { absolute: deep.metaTitle } : service.seoTitle.replace(/\s*\|\s*Softilect$/, "");
+  const description = deep?.metaDescription ?? service.seoDescription;
   return {
     title,
-    description: service.seoDescription,
+    description,
+    keywords: deep?.keywords,
     alternates: { canonical: `/services/${service.slug}` },
-    openGraph: { title: service.seoTitle, description: service.seoDescription, url: `/services/${service.slug}` },
+    openGraph: { title: deep?.metaTitle ?? service.seoTitle, description, url: `/services/${service.slug}` },
   };
 }
 
@@ -35,6 +44,7 @@ export default async function ServiceDetailPage({ params }: Props) {
   const service = getService(slug);
   if (!service) notFound();
 
+  const deep = serviceDeep[slug];
   const category = serviceCategories.find((c) => c.id === service.category);
   const caseStudies = service.relatedProjects.map(getProject).filter((p) => p !== undefined).slice(0, 2);
   const related = [
@@ -59,70 +69,84 @@ export default async function ServiceDetailPage({ params }: Props) {
       />
       <PageHero
         eyebrow={category?.label ?? "Service"}
-        title={service.name}
-        lead={service.hero}
-        crumbs={[{ label: "Home", href: "/" }, { label: "Services", href: "/services" }, { label: service.name }]}
+        title={deep?.h1 ?? service.name}
+        lead={deep?.lead ?? service.hero}
+        aside={hasServiceVisual(service.slug) ? <ServiceVisual slug={service.slug} /> : undefined}
       >
         <PrimaryButton href="/contact">Book a discovery call</PrimaryButton>
         <SecondaryButton href="/work">See our work</SecondaryButton>
       </PageHero>
 
-      <section className="sec" data-tone="light">
-        <div className="wrap split">
-          <div>
+      {deep && (
+        <section className="rib" data-tone="light" aria-label="Highlights">
+          <Ribbon items={deep.ribbon} />
+          <Ribbon items={[...deep.ribbon].reverse()} outline />
+        </section>
+      )}
+
+      <section className="sec ovs pure" data-tone="light">
+        <div className="wrap ovw">
+          <div className="ovh">
             <span className="eyebrow">Overview</span>
             <h2 className="h2">How Softilect approaches {service.name.toLowerCase()}.</h2>
-            <div className="prose" style={{ marginTop: 22 }}>
-              <p>{service.intro}</p>
-            </div>
           </div>
-          <div>
-            <span className="eyebrow">Who it is for</span>
-            <ul className="checks" style={{ marginTop: 22 }}>
-              {service.whoFor.map((w) => (
-                <li key={w}>{w}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <section className="sec" style={{ background: "var(--white)" }} data-tone="light">
-        <div className="wrap">
-          <span className="eyebrow">How we help</span>
-          <h2 className="h2">What we do on a {service.name.toLowerCase()} project.</h2>
-          <div className="cards3">
-            {service.howWeHelp.map((b, i) => (
-              <article className="card" key={b.title}>
-                <span className="num">0{i + 1}</span>
-                <h3>{b.title}</h3>
-                <p>{b.body}</p>
-              </article>
+          <div className="prose ovp">
+            {(deep?.story ?? [service.intro]).map((p) => (
+              <p key={p.slice(0, 24)}>{p}</p>
             ))}
           </div>
-          <div className="split" style={{ marginTop: 40 }}>
-            <div className="panel">
-              <h3>What you receive</h3>
-              <div className="tags">
-                {service.deliverables.map((d) => (
-                  <span key={d}>{d}</span>
-                ))}
-              </div>
-            </div>
-            <div className="panel">
-              <h3>Where we have applied it</h3>
-              <div className="tags">
-                {service.niches.map((n) => (
-                  <span key={n}>{n}</span>
-                ))}
-              </div>
-            </div>
-          </div>
+        </div>
+        <div className="wrap who">
+          <span className="eyebrow">Who it is for</span>
+          <ul>
+            {service.whoFor.map((w, i) => (
+              <li key={w}>
+                <span>{String(i + 1).padStart(2, "0")}</span>
+                {w}
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
+      {deep ? (
+        <>
+          <BuildRows title={deep.buildTitle} rows={deep.build} />
+          <Approach title={deep.approachTitle} items={deep.approach} />
+          <Timeline title={deep.flowTitle} steps={deep.flow} />
+          <ToolStack stack={deep.stack} name={service.name} />
+        </>
+      ) : (
+        <>
+          <BuildRows
+            title={`What we do on a ${service.name.toLowerCase()} project.`}
+            rows={service.howWeHelp.map((b) => ({ title: b.title, text: b.body, items: [] }))}
+          />
+          <section className="sec pure" data-tone="light">
+            <div className="wrap split">
+              <div>
+                <span className="eyebrow">What you receive</span>
+                <ul className="checks" style={{ marginTop: 22 }}>
+                  {service.deliverables.map((d) => (
+                    <li key={d}>{d}</li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <span className="eyebrow">Where we have applied it</span>
+                <ul className="checks" style={{ marginTop: 22 }}>
+                  {service.niches.map((n) => (
+                    <li key={n}>{n}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </section>
+        </>
+      )}
+
       {caseStudies.length > 0 && (
-        <section className="sec" data-tone="light">
+        <section className="sec tint" data-tone="light">
           <div className="wrap">
             <div className="cathead" style={{ borderBottom: 0, paddingBottom: 0 }}>
               <div>
@@ -140,17 +164,20 @@ export default async function ServiceDetailPage({ params }: Props) {
         </section>
       )}
 
-      <section className="sec" style={{ background: caseStudies.length ? "var(--white)" : undefined }} data-tone="light">
+      {deep && <Faq faq={deep.faq} />}
+
+      <section className="sec pure relsec" data-tone="light">
         <div className="wrap">
-          <span className="eyebrow">Related services</span>
-          <h2 className="h2">You may also need</h2>
-          <div className="svgrid">
-            {related.map((s) => (
-              <Link className="sv" key={s.slug} href={`/services/${s.slug}`}>
-                <h3>{s.name}</h3>
-                <p>{s.short}</p>
-                <span className="more">
-                  View service <Arrow />
+          <span className="eyebrow">Keep exploring</span>
+          <h2 className="h2">Services that pair well with {service.name.toLowerCase()}.</h2>
+          <div className="relg">
+            {related.map((r, i) => (
+              <Link className="rl" key={r.slug} href={`/services/${r.slug}`}>
+                <span className="rn" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+                <h3>{r.name}</h3>
+                <p>{r.short}</p>
+                <span className="go">
+                  Explore <Arrow />
                 </span>
               </Link>
             ))}

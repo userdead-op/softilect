@@ -27,7 +27,7 @@ export function Footer() {
             <h4>Company</h4>
             <ul>
               <li><Link href="/about">About</Link></li>
-              <li><Link href="/#process">Process</Link></li>
+              <li><Link href="/process">Process</Link></li>
               <li><Link href="/work">Work</Link></li>
               <li><Link href="/contact">Contact</Link></li>
             </ul>

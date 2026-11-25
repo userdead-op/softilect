@@ -1,4 +1,6 @@
 ﻿import type { Metadata } from "next";
+import { ServiceVisual } from "@/components/services/ServiceVisual";
+import { Ribbon } from "@/components/ui/Ribbon";
 import { PageHero } from "@/components/ui/PageHero";
 import { PrimaryButton } from "@/components/ui/Buttons";
 import { ClosingCta } from "@/components/ui/ClosingCta";
@@ -7,9 +9,9 @@ import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 import { projects } from "@/data/projects";
 
 export const metadata: Metadata = {
-  title: "Case Studies and Work",
+  title: { absolute: "Software Case Studies | Products We Have Built | Softilect" },
   description:
-    "Softilect case studies across fintech, Web3, healthcare, marketplaces, ecommerce operations and AI SaaS, delivered end to end from discovery to launch.",
+    "See the fintech, Web3, healthcare, marketplace and ecommerce products Softilect has built end to end, from first workshop to launch and support.",
   alternates: { canonical: "/work" },
   openGraph: { title: "Case Studies and Work | Softilect", description: "Products Softilect has delivered end to end.", url: "/work" },
 };
@@ -20,13 +22,16 @@ export default function WorkPage() {
       <BreadcrumbJsonLd items={[{ name: "Home", path: "/" }, { name: "Work", path: "/work" }]} />
       <PageHero
         eyebrow="Selected work"
-        title="Products delivered end to end."
+        title="Software case studies: products we have built end to end"
         lead="Fintech, Web3, healthcare, marketplaces, ecommerce operations and AI SaaS. Each one taken from first brief to a confident launch."
-        crumbs={[{ label: "Home", href: "/" }, { label: "Work" }]}
+        aside={<ServiceVisual slug="work" />}
       >
         <PrimaryButton href="/contact">Book a discovery call</PrimaryButton>
       </PageHero>
-      <section className="sec" data-tone="light">
+      <section className="rib" data-tone="light" aria-label="Sectors">
+        <Ribbon items={["Fintech", "Web3", "Healthcare", "Marketplaces", "Ecommerce operations", "AI SaaS", "Logistics", "Education"]} />
+      </section>
+      <section className="sec tint" data-tone="light">
         <div className="wrap">
           <div className="wgrid" style={{ marginTop: 0 }}>
             {projects.map((p, i) => (

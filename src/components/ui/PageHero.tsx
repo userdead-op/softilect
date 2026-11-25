@@ -9,17 +9,20 @@ export function PageHero({
   lead,
   crumbs,
   children,
+  aside,
 }: {
   eyebrow: string;
   title: string;
   lead?: string;
   crumbs?: Crumb[];
   children?: ReactNode;
+  aside?: ReactNode;
 }) {
   return (
     <section className="phero" data-tone="light">
       <div className="grid-bg" aria-hidden="true" />
-      <div className="wrap">
+      <div className={`wrap${aside ? " has-aside" : ""}`}>
+        <div className="ph-main">
         {crumbs && (
           <nav className="crumbs" aria-label="Breadcrumb">
             {crumbs.map((c, i) => (
@@ -34,6 +37,8 @@ export function PageHero({
         <h1>{title}</h1>
         {lead && <p className="lead">{lead}</p>}
         {children && <div className="acts">{children}</div>}
+        </div>
+        {aside && <div className="ph-aside" aria-hidden="true">{aside}</div>}
       </div>
     </section>
   );

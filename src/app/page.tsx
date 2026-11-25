@@ -1,3 +1,4 @@
+import { Ribbon } from "@/components/ui/Ribbon";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ServiceGlobe, type GlobeService } from "@/components/home/ServiceGlobe";
@@ -28,21 +29,6 @@ const GLOBE: [string, string][] = [
 
 const RIBBON_SERVICES = ["Digital Transformation", "Web Development", "App Development", "UX/UI Design", "SaaS", "Ecommerce", "Gen AI", "Blockchain", "dApps", "CRM & CMS", "DevOps", "Quality Assurance"];
 const RIBBON_TECH = ["JavaScript", "TypeScript", "React", "Next.js", "Angular", "Node.js", "NestJS", "Python", "Django", "Flutter", "React Native", "Tailwind", "AWS", "Docker", "Kubernetes", "PostgreSQL", "MongoDB", "GraphQL", "Redis", "Firebase", "Solidity", "Web3.js"];
-
-function Ribbon({ items, outline }: { items: string[]; outline?: boolean }) {
-  const doubled = [...items, ...items];
-  return (
-    <div className="mrow">
-      <div className={`mtrack${outline ? " rev out" : ""}`}>
-        {doubled.map((t, i) => (
-          <span className="mi" key={`${t}-${i}`} aria-hidden={i >= items.length}>
-            {t}
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
 
 export default function Home() {
   const globe: GlobeService[] = GLOBE.map(([slug, label]) => ({ slug, label, short: getService(slug)?.short ?? "" }));

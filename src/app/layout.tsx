@@ -11,7 +11,7 @@ const figtree = Figtree({ variable: "--font-figtree", subsets: ["latin"], weight
 
 const title = "Softilect | Software Development Company for Web, Mobile, AI & Web3";
 const description =
-  "Softilect is a software development company that designs and ships web, mobile, AI, Web3, healthcare and ecommerce products, from discovery to long-term maintenance.";
+  "UK-led software development company building web, mobile, AI and Web3 products that grow your business. From discovery to launch and support. Book a call.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

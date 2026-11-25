@@ -27,7 +27,7 @@ export function ServiceGlobe({ items }: { items: GlobeService[] }) {
       for (let k = 0; k < 3; k++) { const j = ds[k][1], key = i < j ? `${i}-${j}` : `${j}-${i}`; if (!seen.has(key)) { seen.add(key); edges.push([i, j]); } }
     });
     const anchors = fib(items.length).map((p) => p.map((v) => v * 1.1));
-    let W = 0, H = 0, R = 0, rotY = 0.6, rotX = -0.32, speed = 0.0026, target = 0.0026, vis = true, raf = 0;
+    let W = 0, H = 0, R = 0, rotY = 0.6, rotX = -0.32, speed = 0.0026, target = 0.0026, vY = 0.0026, vX = 0.0009, lastX = 0, lastY = 0, vis = true, raf = 0;
     let drag: { x: number; y: number; ry: number; rx: number } | null = null;
 
     const size = () => { const d = Math.min(window.devicePixelRatio || 1, 2); W = box.clientWidth; H = box.clientHeight; R = Math.min(W, H) * 0.36; cv.width = W * d; cv.height = H * d; ctx.setTransform(d, 0, 0, d, 0, 0); };
@@ -40,7 +40,13 @@ export function ServiceGlobe({ items }: { items: GlobeService[] }) {
     };
     const frame = () => {
       speed += (target - speed) * 0.06;
-      if (!drag && !reduce) { rotY += speed; rotX += speed * 0.35; }
+      if (!drag && !reduce) {
+        // Free spin: momentum from the last drag eases into a slow drift that keeps its direction.
+        const sp = Math.hypot(vY, vX), base = 0.0026;
+        if (sp > base) { vY *= 0.97; vX *= 0.97; } else if (sp > 0) { const k = base / sp; vY += (vY * k - vY) * 0.02; vX += (vX * k - vX) * 0.02; }
+        const f = base ? speed / base : 1;
+        rotY += vY * f; rotX += vX * f;
+      }
       ctx.clearRect(0, 0, W, H);
       const P = pts.map(proj);
       ctx.lineWidth = 1;
@@ -72,9 +78,9 @@ export function ServiceGlobe({ items }: { items: GlobeService[] }) {
     const pause = () => { target = 0; }, resume = () => { target = 0.0026; };
     const plates = plateRefs.current.filter(Boolean) as HTMLDivElement[];
     plates.forEach((el) => { el.addEventListener("mouseenter", pause); el.addEventListener("mouseleave", resume); el.addEventListener("focusin", pause); el.addEventListener("focusout", resume); });
-    const down = (e: PointerEvent) => { drag = { x: e.clientX, y: e.clientY, ry: rotY, rx: rotX }; cv.classList.add("drag"); cv.setPointerCapture(e.pointerId); };
-    const move = (e: PointerEvent) => { if (!drag) return; rotY = drag.ry + (e.clientX - drag.x) * 0.008; rotX = drag.rx + (e.clientY - drag.y) * 0.006; if (reduce) frame(); };
-    const up = () => { drag = null; cv.classList.remove("drag"); };
+    const down = (e: PointerEvent) => { drag = { x: e.clientX, y: e.clientY, ry: rotY, rx: rotX }; lastX = e.clientX; lastY = e.clientY; vY = vX = 0; cv.classList.add("drag"); cv.setPointerCapture(e.pointerId); };
+    const move = (e: PointerEvent) => { if (!drag) return; vY = (e.clientX - lastX) * 0.004; vX = (e.clientY - lastY) * 0.003; lastX = e.clientX; lastY = e.clientY; rotY = drag.ry + (e.clientX - drag.x) * 0.008; rotX = drag.rx + (e.clientY - drag.y) * 0.006; if (reduce) frame(); };
+    const up = () => { if (!vY && !vX) { vY = 0.0026; vX = 0.0009; } drag = null; cv.classList.remove("drag"); };
     cv.addEventListener("pointerdown", down); cv.addEventListener("pointermove", move); cv.addEventListener("pointerup", up); cv.addEventListener("pointercancel", up);
     const onResize = () => { size(); if (reduce) frame(); };
     window.addEventListener("resize", onResize);

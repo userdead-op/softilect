@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Reveal } from "@/components/ui/Reveal";
 import { PageHero } from "@/components/ui/PageHero";
 import { PrimaryButton, SecondaryButton } from "@/components/ui/Buttons";
 import { ClosingCta } from "@/components/ui/ClosingCta";
@@ -56,53 +57,48 @@ export default async function ProjectPage({ params }: Props) {
         eyebrow={project.sector}
         title={project.name}
         lead={project.summary}
-        crumbs={[{ label: "Home", href: "/" }, { label: "Work", href: "/work" }, { label: project.name }]}
       >
         <PrimaryButton href="/contact">Start a similar project</PrimaryButton>
         <SecondaryButton href="/work">All case studies</SecondaryButton>
       </PageHero>
 
-      <section className="sec" data-tone="light">
-        <div className="wrap cs3">
-          <div>
-            <h2>The challenge</h2>
-            <p>{project.challenge}</p>
-          </div>
-          <div>
-            <h2>Our approach</h2>
-            <p>{project.approach}</p>
-          </div>
-          <div>
-            <h2>The outcome</h2>
-            <p>{project.outcome}</p>
-          </div>
+      <section className="sec pure" data-tone="light">
+        <div className="wrap stor">
+          {[
+            { k: "01", t: "The challenge", p: project.challenge },
+            { k: "02", t: "Our approach", p: project.approach },
+            { k: "03", t: "The outcome", p: project.outcome },
+          ].map((r, i) => (
+            <Reveal key={r.k} index={i}>
+              <h2><span>{r.k}</span>{r.t}</h2>
+              <p>{r.p}</p>
+            </Reveal>
+          ))}
         </div>
       </section>
 
-      <section className="sec" style={{ background: "var(--white)" }} data-tone="light">
-        <div className="wrap split">
-          <div className="panel">
+      <section className="sec tint" data-tone="light">
+        <div className="wrap tools">
+          <div className="tg">
             <h3>Services involved</h3>
-            <div className="tags">
+            <ul>
               {usedServices.map((s) => (
-                <Link key={s.slug} href={`/services/${s.slug}`}>
-                  {s.name}
-                </Link>
+                <li key={s.slug}><Link href={`/services/${s.slug}`}>{s.name}</Link></li>
               ))}
-            </div>
+            </ul>
           </div>
-          <div className="panel">
+          <div className="tg">
             <h3>Scope and stack</h3>
-            <div className="tags">
+            <ul>
               {project.stack.map((t) => (
-                <span key={t}>{t}</span>
+                <li key={t}><i aria-hidden="true"><b>{t.charAt(0)}</b></i><span>{t}</span></li>
               ))}
-            </div>
+            </ul>
           </div>
         </div>
       </section>
 
-      <section className="sec" data-tone="light">
+      <section className="sec pure" data-tone="light">
         <div className="wrap">
           <span className="eyebrow">More work</span>
           <h2 className="h2">Keep exploring</h2>

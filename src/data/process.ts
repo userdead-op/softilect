@@ -63,3 +63,15 @@
       "Monitoring, feedback loops, dependency hygiene, and roadmap planning with the same accountability that got you live.",
   },
 ];
+
+export const processExtra: Record<string, { you: string[]; we: string[]; time: string }> = {
+  "01": { we: ["Interview stakeholders and users", "Review competitors and the market", "Define goals, scope and risks"], you: ["Brief, scope and success metrics", "Risk log and rough roadmap"], time: "1 to 2 weeks" },
+  "02": { we: ["Map user journeys and screens", "Build clickable prototypes", "Create a reusable design system"], you: ["Wireframes and prototype", "UI kit ready for engineering"], time: "2 to 4 weeks" },
+  "03": { we: ["Plan data, APIs and integrations", "Set access and security rules", "Choose a stack that scales"], you: ["Technical plan", "API contracts and data model"], time: "1 to 2 weeks" },
+  "04": { we: ["Build in short sprints", "Share a working preview every sprint", "Review code before it merges"], you: ["Working software on staging", "Sprint notes and progress reports"], time: "Sprints of 1 to 2 weeks" },
+  "05": { we: ["Run manual and automated tests", "Test across devices and browsers", "Triage bugs by severity"], you: ["Test report", "Release candidate that meets acceptance criteria"], time: "Runs alongside every sprint" },
+  "06": { we: ["Review code and designs", "Hold sprint demos and retrospectives", "Turn lessons into process changes"], you: ["Clear feedback loops", "Steady quality across sprints"], time: "End of each sprint" },
+  "07": { we: ["Log every change request", "Estimate impact on time and cost", "Re-plan the backlog openly"], you: ["Written change records", "Honest, updated timelines"], time: "As changes arise" },
+  "08": { we: ["Automate builds and releases", "Promote through test environments", "Prepare rollback and launch checklists"], you: ["Live product", "Release notes and handover docs"], time: "Launch week" },
+  "09": { we: ["Monitor errors and performance", "Apply updates and security patches", "Plan the next release with you"], you: ["Support plan", "Prioritised roadmap from real data"], time: "Ongoing" },
+};

@@ -5,6 +5,7 @@ import { buildStages } from "@/data/process";
 import { phaseArt } from "@/components/home/phaseArt";
 
 const STEP = 150;
+const HOLD = 260; // dwell on the last phase before the page moves on
 
 /** Pinned "How we build" chapter: each short scroll moves to the next phase, and its drawing builds itself. */
 export function HowWeBuild() {
@@ -15,19 +16,38 @@ export function HowWeBuild() {
   const N = buildStages.length;
 
   const top = () => (trackRef.current ? trackRef.current.getBoundingClientRect().top + window.scrollY : 0);
+  const aim = useRef(0);
+  const lock = useRef(0);
 
   useEffect(() => {
     const onScroll = () => {
       const tr = trackRef.current, st = stageRef.current;
       if (!tr || !st) return;
-      tr.style.height = `${st.offsetHeight + STEP * (N - 1)}px`;
-      const i = Math.max(0, Math.min(N - 1, Math.floor((window.scrollY - top()) / STEP + 0.6)));
-      setCur(i);
+      tr.style.height = `${st.offsetHeight + STEP * (N - 1) + HOLD}px`;
+      aim.current = Math.max(0, Math.min(N - 1, Math.floor((window.scrollY - top()) / STEP + 0.6)));
     };
+    // One wheel notch = one phase, however hard the wheel is flicked.
+    const onWheel = (e: WheelEvent) => {
+      if (e.ctrlKey || Math.abs(e.deltaY) < 2) return;
+      const y = window.scrollY, t0 = top();
+      if (y < t0 - 1 || y > t0 + STEP * (N - 1) + 1) return;
+      const dir = e.deltaY > 0 ? 1 : -1, i = aim.current, nx = i + dir;
+      if (nx < 0 || nx > N - 1) { if (y > t0 + STEP * (N - 1) - 1 && dir > 0) return; if (nx < 0) return; }
+      e.preventDefault();
+      const now = performance.now();
+      if (now < lock.current || nx < 0 || nx > N - 1) return;
+      lock.current = now + 650;
+      window.scrollTo({ top: t0 + nx * STEP, behavior: "instant" });
+    };
+    // Display moves at most one phase per beat, so touch and keyboard scrolling cannot skip ahead.
+    const tick = window.setInterval(() => {
+      setCur((c) => (c === aim.current ? c : c + Math.sign(aim.current - c)));
+    }, 320);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
-    return () => { window.removeEventListener("scroll", onScroll); window.removeEventListener("resize", onScroll); };
+    window.addEventListener("wheel", onWheel, { passive: false });
+    return () => { window.clearInterval(tick); window.removeEventListener("scroll", onScroll); window.removeEventListener("resize", onScroll); window.removeEventListener("wheel", onWheel); };
   }, [N]);
 
   const replay = useCallback((v: HTMLDivElement | null) => {
