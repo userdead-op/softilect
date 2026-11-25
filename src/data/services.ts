@@ -96,7 +96,7 @@ export const services: Service[] = [
     imageAlt: "Team collaborating around strategy boards during digital transformation",
     seoTitle: "Digital Transformation Services | Softilect",
     seoDescription:
-      "Softilect digital transformation services, process discovery, secure architecture: and phased software modernization for growing companies.",
+      "Softilect digital transformation services, process discovery, secure architecture, and phased software modernization for growing companies.",
   },
   {
     slug: "web-development",
@@ -139,7 +139,7 @@ export const services: Service[] = [
     imageAlt: "Developer workstation with code on screen for web development",
     seoTitle: "Web Development Company | Softilect",
     seoDescription:
-      "Softilect web development services for fast, SEO-friendly websites and web applications, Next.js, APIs, CMS: and secure integrations.",
+      "Softilect web development services for fast, SEO-friendly websites and web applications, Next.js, APIs, CMS, and secure integrations.",
   },
   {
     slug: "app-development",
@@ -182,7 +182,7 @@ export const services: Service[] = [
     imageAlt: "Smartphone in hand displaying a modern mobile application interface",
     seoTitle: "Mobile App Development | Softilect",
     seoDescription:
-      "Softilect app development for iOS, Android, and cross-platform products, marketplaces, healthcare, fintech: and SaaS mobile experiences.",
+      "Softilect app development for iOS, Android, and cross-platform products, marketplaces, healthcare, fintech, and SaaS mobile experiences.",
   },
   {
     slug: "custom-software-development",
@@ -225,7 +225,7 @@ export const services: Service[] = [
     imageAlt: "Product team working on custom software at a collaborative desk",
     seoTitle: "Custom Software Development | Softilect",
     seoDescription:
-      "Softilect custom software development for internal platforms, portals: and domain-specific systems with secure scalable architecture.",
+      "Softilect custom software development for internal platforms, portals, and domain-specific systems with secure scalable architecture.",
   },
   {
     slug: "ux-ui-design",
@@ -268,7 +268,7 @@ export const services: Service[] = [
     imageAlt: "UX designer reviewing interface layouts on a digital canvas",
     seoTitle: "UX UI Design Agency | Softilect",
     seoDescription:
-      "Softilect UX/UI design services, user journeys, design systems, prototypes, and motion guidelines for SaaS, fintech: and marketplace products.",
+      "Softilect UX/UI design services, user journeys, design systems, prototypes, and motion guidelines for SaaS, fintech, and marketplace products.",
   },
   {
     slug: "design-and-development",
@@ -354,7 +354,7 @@ export const services: Service[] = [
     imageAlt: "Retail checkout scene representing modern ecommerce experiences",
     seoTitle: "Ecommerce Development Services | Softilect",
     seoDescription:
-      "Softilect ecommerce development for storefronts, marketplaces, and fulfillment operations, inventory, checkout: and multichannel reporting.",
+      "Softilect ecommerce development for storefronts, marketplaces, and fulfillment operations, inventory, checkout, and multichannel reporting.",
   },
   {
     slug: "healthcare",
@@ -397,7 +397,7 @@ export const services: Service[] = [
     imageAlt: "Modern hospital corridor suggesting digital healthcare delivery",
     seoTitle: "Healthcare Software Development | Softilect",
     seoDescription:
-      "Softilect healthcare software services for patient portals, care workflows, secure messaging: and privacy-minded product architecture.",
+      "Softilect healthcare software services for patient portals, care workflows, secure messaging, and privacy-minded product architecture.",
   },
   {
     slug: "crms-cms",
@@ -440,7 +440,7 @@ export const services: Service[] = [
     imageAlt: "Business analytics charts representing CRM and CMS operations",
     seoTitle: "CRM and CMS Development | Softilect",
     seoDescription:
-      "Softilect CRM and CMS development, custom pipelines, content models: and admin workflows for agencies and growing enterprises.",
+      "Softilect CRM and CMS development, custom pipelines, content models, and admin workflows for agencies and growing enterprises.",
   },
   {
     slug: "blockchain",
@@ -483,7 +483,7 @@ export const services: Service[] = [
     imageAlt: "Close-up of cryptocurrency hardware and digital finance concept",
     seoTitle: "Blockchain Development Services | Softilect",
     seoDescription:
-      "Softilect blockchain development for Web3 products, smart-contract integrations, wallet UX: and secure launch-ready architecture.",
+      "Softilect blockchain development for Web3 products, smart-contract integrations, wallet UX, and secure launch-ready architecture.",
   },
   {
     slug: "exchanges",
@@ -526,7 +526,7 @@ export const services: Service[] = [
     imageAlt: "Financial trading charts on multiple screens",
     seoTitle: "CEX and DEX Development | Softilect",
     seoDescription:
-      "Softilect services for centralized and decentralized exchange products, trading UX, wallet flows: and security-minded architecture.",
+      "Softilect services for centralized and decentralized exchange products, trading UX, wallet flows, and security-minded architecture.",
   },
   {
     slug: "decentralized-wallets",
@@ -569,7 +569,7 @@ export const services: Service[] = [
     imageAlt: "Abstract secure digital vault concept for crypto wallets",
     seoTitle: "Decentralized Wallet Development | Softilect",
     seoDescription:
-      "Softilect decentralized wallet development, secure onboarding, signing UX, portfolio views: and dApp connection experiences.",
+      "Softilect decentralized wallet development, secure onboarding, signing UX, portfolio views, and dApp connection experiences.",
   },
   {
     slug: "dapps",
@@ -612,7 +612,7 @@ export const services: Service[] = [
     imageAlt: "Abstract network connections representing decentralized applications",
     seoTitle: "dApp Development Company | Softilect",
     seoDescription:
-      "Softilect dApp development services, usable decentralized apps with wallet UX, hybrid architecture: and production-ready release practices.",
+      "Softilect dApp development services, usable decentralized apps with wallet UX, hybrid architecture, and production-ready release practices.",
   },
   {
     slug: "nft-marketplaces",
@@ -655,7 +655,7 @@ export const services: Service[] = [
     imageAlt: "Digital collectible art aesthetic for NFT marketplace products",
     seoTitle: "NFT Marketplace Development | Softilect",
     seoDescription:
-      "Softilect NFT marketplace development, minting, listing, discovery, and creator tooling for art, sports: and community platforms.",
+      "Softilect NFT marketplace development, minting, listing, discovery, and creator tooling for art, sports, and community platforms.",
   },
   {
     slug: "gen-ai",
@@ -698,7 +698,7 @@ export const services: Service[] = [
     imageAlt: "Abstract neural glow representing generative AI systems",
     seoTitle: "Generative AI Development | Softilect",
     seoDescription:
-      "Softilect Gen AI services for copilots, AI workforce automations: and LLM-powered workflows with grounded architecture and human review loops.",
+      "Softilect Gen AI services for copilots, AI workforce automations, and LLM-powered workflows with grounded architecture and human review loops.",
   },
   {
     slug: "saas",
@@ -741,7 +741,7 @@ export const services: Service[] = [
     imageAlt: "Startup workspace representing modern SaaS product teams",
     seoTitle: "SaaS Development Company | Softilect",
     seoDescription:
-      "Softilect SaaS development, multi-tenant architecture, onboarding UX, roles: and scalable product engineering for B2B and AI platforms.",
+      "Softilect SaaS development, multi-tenant architecture, onboarding UX, roles, and scalable product engineering for B2B and AI platforms.",
   },
   {
     slug: "quality-assurance",
@@ -784,7 +784,7 @@ export const services: Service[] = [
     imageAlt: "Quality assurance testing session on laptop and notes",
     seoTitle: "Quality Assurance Services | Softilect",
     seoDescription:
-      "Softilect QA services, acceptance testing, automation, exploratory coverage: and release readiness for mission-critical software.",
+      "Softilect QA services, acceptance testing, automation, exploratory coverage, and release readiness for mission-critical software.",
   },
   {
     slug: "devops",
@@ -827,7 +827,7 @@ export const services: Service[] = [
     imageAlt: "Server room lights representing DevOps infrastructure",
     seoTitle: "DevOps Services | Softilect",
     seoDescription:
-      "Softilect DevOps services for CI/CD, environment strategy, secrets hygiene: and production observability.",
+      "Softilect DevOps services for CI/CD, environment strategy, secrets hygiene, and production observability.",
   },
   {
     slug: "maintenance-and-support",
@@ -870,7 +870,7 @@ export const services: Service[] = [
     imageAlt: "Supportive product team collaborating after software launch",
     seoTitle: "Software Maintenance and Support | Softilect",
     seoDescription:
-      "Softilect maintenance and support services, monitoring, iteration, change management: and long-term product care after launch.",
+      "Softilect maintenance and support services, monitoring, iteration, change management, and long-term product care after launch.",
   },
 ];
 

@@ -1,21 +1,26 @@
 # Softilect
 
-Cinematic marketing site for the Softilect software development agency.
+Marketing site for the Softilect software development company.
 
 ## Stack
 
-- Next.js (App Router)
-- Tailwind CSS
-- GSAP + ScrollTrigger (story-mode scroll)
-- Framer Motion (magnetic CTAs / micro-interactions)
-- Lenis (smooth scrolling)
+- Next.js 16 (App Router), React 19, TypeScript
+- Hand-written CSS design system in `src/app/globals.css` (Tailwind is only used for its reset)
+- Fonts: Syne (headings) and Figtree (text) via `next/font`
+- No animation libraries: the hero globe, the network background and the "How we build" scenes are plain canvas, SVG and CSS
 - Cloudflare Workers via `@opennextjs/cloudflare` + Wrangler
+
+## Email (contact form)
+
+`/api/contact` sends briefs through Brevo. Set these as Worker secrets (or in `.dev.vars` locally):
+`BREVO_API_KEY` (or `SMTP_LOGIN` + `SMTP_KEY`), `SMTP_FROM`, and optionally `ADMIN_NOTIFICATION_EMAIL`
+(defaults to hello@softilect.com). The route has a honeypot, a minimum fill time and a per-IP rate limit.
 
 ## Pages
 
-- `/` - cinematic story-scroll home
-- `/services`
-- `/work`
+- `/` - home with the service globe and the pinned delivery cycle
+- `/services` and `/services/[slug]` (18 service pages)
+- `/work` and `/work/[slug]` (case studies)
 - `/about`
 - `/contact`
 

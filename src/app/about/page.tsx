@@ -1,82 +1,88 @@
 ﻿import type { Metadata } from "next";
 import { PageHero } from "@/components/ui/PageHero";
-import { MagneticButton } from "@/components/ui/MagneticButton";
+import { PrimaryButton, SecondaryButton } from "@/components/ui/Buttons";
+import { ClosingCta } from "@/components/ui/ClosingCta";
+import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+import { buildStages } from "@/data/process";
 
 export const metadata: Metadata = {
-  title: "About Softilect | Software Development Agency",
+  title: { absolute: "About Softilect | Software Development Company" },
   description:
-    "Learn about Softilect, a software development agency helping startups and enterprises design, build, and launch AI, SaaS, Web3, healthcare, and ecommerce products.",
+    "Learn about Softilect, a software development company helping startups and enterprises design, build and launch AI, SaaS, Web3, healthcare and ecommerce products.",
   alternates: { canonical: "/about" },
+  openGraph: { title: "About Softilect", description: "A software studio built for end-to-end ownership.", url: "/about" },
 };
 
 const principles = [
-  {
-    title: "Discovery before code",
-    copy: "BRDs, SRS, journeys, and risk logs come first, so every sprint starts with signal, not guesswork.",
-  },
-  {
-    title: "Secure architecture",
-    copy: "We choose foundations that survive year-two growth: access control, integrations, and threat-minded design.",
-  },
-  {
-    title: "Visible delivery",
-    copy: "Standups, velocity, QA gates, retros, and change control keep accountability tight from kickoff through maintenance.",
-  },
+  { title: "Discovery before code", copy: "BRDs, SRS, journeys and risk logs come first, so every sprint starts with signal, not guesswork." },
+  { title: "Secure architecture", copy: "We choose foundations that survive year-two growth: access control, integrations and threat-minded design." },
+  { title: "Visible delivery", copy: "Standups, velocity, QA gates, retros and change control keep accountability tight from kickoff through maintenance." },
 ];
 
 export default function AboutPage() {
   return (
     <>
+      <BreadcrumbJsonLd items={[{ name: "Home", path: "/" }, { name: "About", path: "/about" }]} />
       <PageHero
         eyebrow="About"
         title="A software studio built for end-to-end ownership."
-        description="Softilect partners with founders and product teams across AI, SaaS, Web2, Web3, healthcare, fintech, and ecommerce to turn ideas into scalable shipped products."
-      />
+        lead="Softilect partners with founders and product teams across AI, SaaS, Web2, Web3, healthcare, fintech and ecommerce to turn ideas into scalable, shipped products."
+        crumbs={[{ label: "Home", href: "/" }, { label: "About" }]}
+      >
+        <PrimaryButton href="/contact">Work with Softilect</PrimaryButton>
+        <SecondaryButton href="/work">See our work</SecondaryButton>
+      </PageHero>
 
-      <section className="bg-bg-mist px-5 py-20 md:px-8 md:py-28">
-        <div className="mx-auto grid max-w-7xl gap-12 md:grid-cols-[0.9fr_1.1fr] md:gap-20">
+      <section className="sec" data-tone="light">
+        <div className="wrap split">
           <div>
-            <p className="mono text-[11px] text-signal">Studio note</p>
-            <h2 className="display mt-4 text-3xl md:text-5xl">
-              Strategy, design, engineering, and launch in one continuous
-              production.
-            </h2>
+            <span className="eyebrow">Who we are</span>
+            <h2 className="h2">One partner from the first idea to the final commit.</h2>
           </div>
-          <div className="space-y-6 text-base leading-relaxed text-muted md:text-lg">
+          <div className="prose">
             <p>
-              Softilect exists for teams who need more than a vendor queue.
-              We run product delivery the way serious operators expect:
-              documented requirements, secure architecture decisions, visible
-              sprints, quality gates, and post-launch care.
+              Softilect is an end-to-end development partner for AI, Web3, web and mobile products. We take raw ideas through discovery, design, architecture and engineering, and we stay on after launch to keep products fast, secure and growing.
             </p>
             <p>
-              Our portfolio spans blockchain fintech, healthcare platforms,
-              marketplaces, ecommerce ops systems, AI SaaS, and enterprise CRM
-              tooling, with clients across the UAE, USA, and UK.
+              Our teams have shipped products across fintech, healthcare, marketplaces, ecommerce operations and AI SaaS. Every engagement runs on the same delivery cycle, so you always know what happens next.
             </p>
           </div>
         </div>
       </section>
 
-      <section className="bg-bg px-5 py-20 md:px-8 md:py-28">
-        <div className="mx-auto max-w-7xl">
-          <p className="mono text-[11px] text-signal">Principles</p>
-          <div className="mt-10 grid gap-10 md:grid-cols-3">
-            {principles.map((item, i) => (
-              <article key={item.title} className="border-t border-ink/10 pt-6">
-                <span className="mono text-[10px] text-muted">0{i + 1}</span>
-                <h3 className="display mt-3 text-2xl tracking-[-0.03em]">
-                  {item.title}
-                </h3>
-                <p className="mt-4 text-muted">{item.copy}</p>
+      <section className="sec appr" style={{ background: "var(--white)" }} data-tone="light">
+        <div className="wrap">
+          <span className="eyebrow">How we work</span>
+          <h2 className="h2">Three principles behind every project.</h2>
+          <div className="agrid">
+            {principles.map((p) => (
+              <div className="ag" key={p.title} style={{ background: "var(--bg)" }}>
+                <div className="ic" aria-hidden="true" />
+                <h3>{p.title}</h3>
+                <p>{p.copy}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="sec" data-tone="light">
+        <div className="wrap">
+          <span className="eyebrow">Delivery cycle</span>
+          <h2 className="h2">Nine phases, from discovery to maintenance.</h2>
+          <div className="cards3">
+            {buildStages.map((s) => (
+              <article className="card" key={s.id}>
+                <span className="num">Phase {s.id}</span>
+                <h3>{s.title}</h3>
+                <p>{s.line}</p>
               </article>
             ))}
           </div>
-          <div className="mt-16">
-            <MagneticButton href="/contact">Work with Softilect</MagneticButton>
-          </div>
         </div>
       </section>
+
+      <ClosingCta />
     </>
   );
 }

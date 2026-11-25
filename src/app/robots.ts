@@ -1,25 +1,11 @@
 import type { MetadataRoute } from "next";
+import { SITE_URL } from "@/lib/site";
 
 export default function robots(): MetadataRoute.Robots {
-  const base = "https://softilect.com";
-
   return {
-    rules: [
-      {
-        userAgent: "*",
-        allow: "/",
-        disallow: ["/api/", "/_next/"],
-      },
-      {
-        userAgent: "GPTBot",
-        allow: "/",
-      },
-      {
-        userAgent: "Google-Extended",
-        allow: "/",
-      },
-    ],
-    sitemap: `${base}/sitemap.xml`,
-    host: base,
+    // /_next is left crawlable on purpose: search engines need the CSS and JS to render pages.
+    rules: [{ userAgent: "*", allow: "/", disallow: ["/api/"] }],
+    sitemap: `${SITE_URL}/sitemap.xml`,
+    host: SITE_URL,
   };
 }

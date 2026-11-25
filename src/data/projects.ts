@@ -63,7 +63,7 @@ export const projects: Project[] = [
     featured: true,
     seoTitle: "KLEENUP Marketplace Case Study | Softilect Product Build",
     seoDescription:
-      "Softilect case study for KLEENUP, an on-demand cleaning marketplace with realtime bidding, vetting: and multi-platform delivery.",
+      "Softilect case study for KLEENUP, an on-demand cleaning marketplace with realtime bidding, vetting, and multi-platform delivery.",
   },
   {
     slug: "savo-prep-center",
@@ -90,7 +90,7 @@ export const projects: Project[] = [
     featured: true,
     seoTitle: "Savo Prep Center Case Study | Softilect Ecommerce Ops",
     seoDescription:
-      "How Softilect engineered Savo Prep Center, inventory, shipping: and client reporting for multichannel ecommerce fulfillment.",
+      "How Softilect engineered Savo Prep Center, inventory, shipping, and client reporting for multichannel ecommerce fulfillment.",
   },
   {
     slug: "yana-meals",
@@ -117,7 +117,7 @@ export const projects: Project[] = [
     featured: true,
     seoTitle: "YANA Meals Case Study | Softilect Healthcare Software",
     seoDescription:
-      "Softilect healthcare case study for YANA Meals, patient portal, meal subscriptions, HIPAA-aware messaging: and PERS integrations.",
+      "Softilect healthcare case study for YANA Meals, patient portal, meal subscriptions, HIPAA-aware messaging, and PERS integrations.",
   },
   {
     slug: "the-duh",
@@ -139,7 +139,7 @@ export const projects: Project[] = [
     featured: false,
     seoTitle: "The DUH Case Study | Softilect Web3 Sports Platform",
     seoDescription:
-      "Case study: Softilect delivery for The DUH, fantasy sports Web3 platform with mint, burn: and trade flows for athlete assets.",
+      "Case study: Softilect delivery for The DUH, fantasy sports Web3 platform with mint, burn, and trade flows for athlete assets.",
   },
   {
     slug: "plism-art",

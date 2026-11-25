@@ -17,7 +17,7 @@ export function getNotificationEmail(): string {
   return (
     readEnv("ADMIN_NOTIFICATION_EMAIL") ||
     readEnv("ADMIN_EMAIL") ||
-    "za793984@gmail.com"
+    "hello@softilect.com"
   );
 }
 

@@ -1,115 +1,47 @@
-﻿import type { Metadata } from "next";
-import { Syne, Figtree, JetBrains_Mono } from "next/font/google";
+﻿import type { Metadata, Viewport } from "next";
+import { Syne, Figtree } from "next/font/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { SmoothScroll } from "@/components/providers/SmoothScroll";
-import { CursorGlow } from "@/components/ui/CursorGlow";
-import { JsonLd } from "@/components/seo/JsonLd";
+import { OrganizationJsonLd } from "@/components/seo/JsonLd";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
-const syne = Syne({
-  variable: "--font-syne",
-  subsets: ["latin"],
-  weight: ["500", "600", "700", "800"],
-});
+const syne = Syne({ variable: "--font-syne", subsets: ["latin"], weight: ["600", "700", "800"], display: "swap" });
+const figtree = Figtree({ variable: "--font-figtree", subsets: ["latin"], weight: ["400", "500", "600"], display: "swap" });
 
-const figtree = Figtree({
-  variable: "--font-figtree",
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-});
-
-const jetbrains = JetBrains_Mono({
-  variable: "--font-jetbrains",
-  subsets: ["latin"],
-  weight: ["400", "500"],
-});
-
-const siteUrl = "https://softilect.com";
+const title = "Softilect | Software Development Company for Web, Mobile, AI & Web3";
+const description =
+  "Softilect is a software development company that designs and ships web, mobile, AI, Web3, healthcare and ecommerce products, from discovery to long-term maintenance.";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title: {
-    default:
-      "Softilect | Software Development Agency for Web, AI, Web3 & Ecommerce",
-    template: "%s | Softilect",
-  },
-  description:
-    "Softilect is a software development agency that designs and ships web, mobile, AI, Web3, healthcare, and ecommerce products. Discovery to maintenance with secure architecture and cinematic product craft.",
-  keywords: [
-    "software development agency",
-    "web development company",
-    "custom software development",
-    "blockchain development",
-    "dApp development",
-    "NFT marketplace development",
-    "ecommerce development",
-    "healthcare software development",
-    "Gen AI development",
-    "SaaS development",
-    "UX UI design agency",
-    "Softilect",
-  ],
+  metadataBase: new URL(SITE_URL),
+  title: { default: title, template: "%s | Softilect" },
+  description,
+  applicationName: "Softilect",
   authors: [{ name: "Softilect" }],
   creator: "Softilect",
   publisher: "Softilect",
-  applicationName: "Softilect",
   category: "technology",
-  alternates: {
-    canonical: "/",
-  },
-  openGraph: {
-    type: "website",
-    locale: "en_US",
-    url: siteUrl,
-    siteName: "Softilect",
-    title:
-      "Softilect | Software Development Agency for Web, AI, Web3 & Ecommerce",
-    description:
-      "Design, engineer, and launch high-performing digital products with Softilect. Web, mobile, AI, Web3, healthcare, and ecommerce.",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Softilect | Software Development Agency",
-    description:
-      "Software development agency for web, mobile, AI, Web3, healthcare, and ecommerce products.",
-  },
+  alternates: { canonical: "/" },
+  openGraph: { type: "website", locale: "en_GB", url: SITE_URL, siteName: "Softilect", title, description },
+  twitter: { card: "summary_large_image", title, description },
   robots: {
     index: true,
     follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-      "max-video-preview": -1,
-    },
-  },
-  verification: {
-    // Add Search Console token when available:
-    // google: "your-verification-token",
+    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 },
   },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export const viewport: Viewport = { themeColor: "#f4f7f9" };
+
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html
-      lang="en"
-      className={`${syne.variable} ${figtree.variable} ${jetbrains.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col bg-bg text-ink">
-        <JsonLd />
-        <SmoothScroll>
-          <div className="noise" aria-hidden />
-          <CursorGlow />
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
-        </SmoothScroll>
+    <html lang="en" className={`${syne.variable} ${figtree.variable}`}>
+      <body>
+        <OrganizationJsonLd />
+        <Header />
+        <main id="main">{children}</main>
+        <Footer />
       </body>
     </html>
   );

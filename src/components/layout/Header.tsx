@@ -2,234 +2,113 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { cn } from "@/lib/cn";
-import { GreenShadeLayers } from "@/components/ui/GreenShadeLayers";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { PrimaryButton } from "@/components/ui/Buttons";
 
-const desktopLinks = [
-  { href: "/services", label: "What we offer" },
-  { href: "/work", label: "Digital Realm" },
-  { href: "/about", label: "About" },
-];
-
-const mobileLinks = [
-  { href: "/services", label: "What we offer" },
-  { href: "/work", label: "Digital Realm" },
+const links = [
+  { href: "/services", label: "Services" },
+  { href: "/#process", label: "Process" },
+  { href: "/work", label: "Work" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];
 
 export function Header() {
   const pathname = usePathname();
+  const [solid, setSolid] = useState(false);
+  const [dark, setDark] = useState(false);
   const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const navRef = useRef<HTMLElement>(null);
+  const ptRef = useRef<HTMLSpanElement>(null);
 
-  const darkHero =
-    pathname.startsWith("/work/") || pathname.startsWith("/services/");
+  const activeHref = links.find((l) => !l.href.startsWith("/#") && (pathname === l.href || pathname.startsWith(`${l.href}/`)))?.href;
+
+  const moveTo = useCallback((el: HTMLElement | null) => {
+    const pt = ptRef.current;
+    if (!pt) return;
+    if (!el) {
+      pt.style.opacity = "0";
+      return;
+    }
+    pt.style.opacity = "1";
+    pt.style.left = `${el.offsetLeft + el.offsetWidth / 2 - 3}px`;
+  }, []);
+
+  const resetDot = useCallback(() => {
+    const nav = navRef.current;
+    if (!nav) return;
+    moveTo(activeHref ? nav.querySelector<HTMLElement>(`a[href="${activeHref}"]`) : null);
+  }, [activeHref, moveTo]);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    resetDot();
+    document.fonts?.ready.then(resetDot);
+    const ro = new ResizeObserver(resetDot);
+    if (navRef.current) ro.observe(navRef.current);
+    window.addEventListener("resize", resetDot);
+    return () => { ro.disconnect(); window.removeEventListener("resize", resetDot); };
+  }, [resetDot]);
+
+  useEffect(() => {
+    const onScroll = () => {
+      setSolid(window.scrollY > 20);
+      let isDark = false;
+      document.querySelectorAll<HTMLElement>('[data-tone="dark"]').forEach((s) => {
+        const r = s.getBoundingClientRect();
+        if (r.top <= 40 && r.bottom > 40) isDark = true;
+      });
+      setDark(isDark);
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [open]);
-
-  const closeMenu = () => setOpen(false);
-  const lightChrome = darkHero && !scrolled && !open;
+  }, [pathname]);
 
   return (
-    <header
-      className={cn(
-        "fixed inset-x-0 top-0 z-40 border-b transition-all duration-500",
-        "backdrop-blur-2xl backdrop-saturate-150",
-        "before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-white/60 before:to-transparent",
-        "after:pointer-events-none after:absolute after:inset-0 after:bg-gradient-to-b after:from-white/25 after:to-transparent after:opacity-60",
-        lightChrome
-          ? "border-white/15 bg-bg-deep/50 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.14)]"
-          : "border-white/35 bg-bg/50 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.55),0_8px_32px_rgba(16,24,32,0.06)]",
-      )}
-    >
-      <div className="relative z-10 mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-5 md:h-20 md:px-8 xl:max-w-[90rem] 2xl:max-w-[100rem]">
-        <Link
-          href="/"
-          onClick={closeMenu}
-          className="group relative z-50 flex items-baseline gap-2"
-        >
-          <span
-            className={cn(
-              "display text-2xl tracking-[-0.05em] transition-colors md:text-[1.75rem]",
-              lightChrome ? "text-bg-mist" : "text-ink",
-            )}
-          >
-            Softilect
-          </span>
-          <span
-            className={cn(
-              "mono hidden text-[10px] sm:inline",
-              lightChrome ? "text-bg-mist/60" : "text-muted",
-            )}
-          >
-            / studio
-          </span>
+    <header className={`hd${solid || open ? " solid" : ""}${dark && !open ? " dark" : ""}`}>
+      <div className="row">
+        <Link className="logo" href="/" aria-label="Softilect home">
+          Softilect<i aria-hidden="true" />
         </Link>
-
-        <nav className="hidden items-center gap-8 lg:flex">
-          {desktopLinks.map((link) => (
+        <nav className="nav" aria-label="Main" ref={navRef} onMouseLeave={resetDot}>
+          {links.map((l) => (
             <Link
-              key={link.href}
-              href={link.href}
-              className={cn(
-                "mono text-[11px] transition-colors",
-                pathname === link.href || pathname.startsWith(`${link.href}/`)
-                  ? "text-signal-bright"
-                  : lightChrome
-                    ? "text-bg-mist/75 hover:text-bg-mist"
-                    : "text-ink-soft hover:text-ink",
-              )}
+              key={l.href}
+              href={l.href}
+              className={l.href === activeHref ? "on" : undefined}
+              aria-current={l.href === activeHref ? "page" : undefined}
+              onMouseEnter={(e) => moveTo(e.currentTarget)}
+              onFocus={(e) => moveTo(e.currentTarget)}
             >
-              {link.label}
+              {l.label}
             </Link>
           ))}
-          <Link
-            href="/contact"
-            className="group btn-green-shade inline-flex items-center justify-center px-5 py-2.5 text-sm"
-          >
-            <GreenShadeLayers />
-            <span className="relative z-10 display tracking-[-0.02em] text-bg-deep transition-colors duration-500 delay-300 group-hover:text-bg-mist">
-              Start a project
-            </span>
-          </Link>
+          <span className="pt" ref={ptRef} aria-hidden="true" />
         </nav>
-
+        <PrimaryButton href="/contact" size="sm">
+          Book a call
+        </PrimaryButton>
         <button
+          className="mbtn"
           type="button"
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
-          className={cn(
-            "relative z-50 flex h-11 w-11 items-center justify-center rounded-full border shadow-[0_8px_30px_rgba(16,24,32,0.08)] backdrop-blur-xl lg:hidden",
-            lightChrome
-              ? "border-white/20 bg-white/10"
-              : "border-ink/10 bg-white/40",
-          )}
-          onClick={() => setOpen((v) => !v)}
+          aria-controls="mpanel"
+          onClick={() => setOpen((o) => !o)}
         >
-          <span className="sr-only">Menu</span>
-          <span className="relative flex h-3.5 w-5 flex-col justify-between">
-            <span
-              className={cn(
-                "block h-[1.5px] w-full origin-center rounded-full transition-transform duration-300",
-                lightChrome ? "bg-bg-mist" : "bg-ink",
-                open && "translate-y-[6px] rotate-45 !bg-ink",
-              )}
-            />
-            <span
-              className={cn(
-                "block h-[1.5px] w-full rounded-full transition-opacity duration-200",
-                lightChrome ? "bg-bg-mist" : "bg-ink",
-                open && "opacity-0",
-              )}
-            />
-            <span
-              className={cn(
-                "block h-[1.5px] w-full origin-center rounded-full transition-transform duration-300",
-                lightChrome ? "bg-bg-mist" : "bg-ink",
-                open && "-translate-y-[6px] -rotate-45 !bg-ink",
-              )}
-            />
-          </span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+            {open ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 8h16M4 16h16" />}
+          </svg>
         </button>
       </div>
-
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            className="fixed inset-0 z-40 lg:hidden"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.35 }}
-          >
-            <button
-              type="button"
-              aria-label="Close menu overlay"
-              className="absolute inset-0 bg-[#0b1218]/35 backdrop-blur-md"
-              onClick={closeMenu}
-            />
-
-            <motion.div
-              initial={{ opacity: 0, y: -28, scale: 0.96 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -18, scale: 0.98 }}
-              transition={{ type: "spring", stiffness: 280, damping: 26 }}
-              className="absolute inset-x-4 top-[4.75rem] overflow-hidden rounded-[2rem] border border-white/50 bg-white/45 p-6 shadow-[0_30px_80px_rgba(16,24,32,0.18)] backdrop-blur-2xl md:inset-x-8 md:p-8"
-              style={{
-                backgroundImage:
-                  "linear-gradient(145deg, rgba(255,255,255,0.72), rgba(255,255,255,0.28) 45%, rgba(46,196,160,0.12))",
-              }}
-            >
-              <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-signal-bright/25 blur-3xl" />
-              <div className="pointer-events-none absolute -bottom-12 -left-8 h-36 w-36 rounded-full bg-ember/20 blur-3xl" />
-
-              <div className="relative">
-                <p className="mono text-[10px] text-ink-soft">Navigate</p>
-                <nav className="mt-6 flex flex-col gap-2">
-                  {mobileLinks.map((link, i) => (
-                    <motion.div
-                      key={link.href}
-                      initial={{ opacity: 0, x: -18 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.05 * i + 0.08 }}
-                    >
-                      <Link
-                        href={link.href}
-                        onClick={closeMenu}
-                        className={cn(
-                          "display flex items-center justify-between rounded-2xl px-4 py-3.5 text-3xl tracking-[-0.04em] transition-colors md:text-4xl",
-                          pathname === link.href ||
-                            pathname.startsWith(`${link.href}/`)
-                            ? "bg-white/50 text-signal"
-                            : "text-ink hover:bg-white/35",
-                        )}
-                      >
-                        <span>{link.label}</span>
-                        <span className="mono text-[10px] text-muted">
-                          0{i + 1}
-                        </span>
-                      </Link>
-                    </motion.div>
-                  ))}
-                </nav>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.35 }}
-                  className="mt-8"
-                >
-                  <Link
-                    href="/contact"
-                    onClick={closeMenu}
-                    className="group btn-green-shade display flex w-full items-center justify-center rounded-full px-6 py-4 text-base shadow-lg shadow-signal/25"
-                  >
-                    <GreenShadeLayers />
-                    <span className="relative z-10 text-bg-deep transition-colors duration-500 delay-300 group-hover:text-bg-mist">
-                      Start a project →
-                    </span>
-                  </Link>
-                </motion.div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <div id="mpanel" className={`mpanel${open ? " open" : ""}`} onClick={(e) => { if ((e.target as HTMLElement).closest("a")) setOpen(false); }}>
+        {links.map((l) => (
+          <Link key={l.href} href={l.href}>
+            {l.label}
+          </Link>
+        ))}
+        <PrimaryButton href="/contact">Book a discovery call</PrimaryButton>
+      </div>
     </header>
   );
 }

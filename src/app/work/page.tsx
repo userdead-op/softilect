@@ -1,41 +1,41 @@
 ﻿import type { Metadata } from "next";
 import { PageHero } from "@/components/ui/PageHero";
-import { ProjectCard } from "@/components/work/ProjectCard";
+import { PrimaryButton } from "@/components/ui/Buttons";
+import { ClosingCta } from "@/components/ui/ClosingCta";
+import { WorkCard } from "@/components/ui/WorkCard";
+import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 import { projects } from "@/data/projects";
 
 export const metadata: Metadata = {
-  title: "Digital Realm | Softilect Case Studies",
+  title: "Case Studies and Work",
   description:
-    "Explore Softilect case studies across Web3 fintech, healthcare software, marketplaces, ecommerce ops, AI SaaS, and enterprise platforms.",
+    "Softilect case studies across fintech, Web3, healthcare, marketplaces, ecommerce operations and AI SaaS, delivered end to end from discovery to launch.",
   alternates: { canonical: "/work" },
-  openGraph: {
-    title: "Digital Realm | Softilect Case Studies",
-    description:
-      "Explore Softilect case studies across Web3, healthcare, marketplaces, ecommerce, AI SaaS, and enterprise platforms.",
-    url: "/work",
-  },
+  openGraph: { title: "Case Studies and Work | Softilect", description: "Products Softilect has delivered end to end.", url: "/work" },
 };
 
 export default function WorkPage() {
   return (
     <>
+      <BreadcrumbJsonLd items={[{ name: "Home", path: "/" }, { name: "Work", path: "/work" }]} />
       <PageHero
-        eyebrow="Digital Realm"
-        title="Selected premieres from the Softilect studio."
-        description="Real products delivered across healthcare, Web3, SaaS, marketplaces, and ecommerce operations. Built with Softilect delivery discipline."
-      />
-
-      <section className="bg-bg px-5 pb-24 md:px-8 md:pb-32">
-        <div className="mx-auto grid max-w-7xl gap-8 md:grid-cols-2">
-          {projects.map((project, i) => (
-            <ProjectCard
-              key={project.slug}
-              project={project}
-              priority={i < 2}
-            />
-          ))}
+        eyebrow="Selected work"
+        title="Products delivered end to end."
+        lead="Fintech, Web3, healthcare, marketplaces, ecommerce operations and AI SaaS. Each one taken from first brief to a confident launch."
+        crumbs={[{ label: "Home", href: "/" }, { label: "Work" }]}
+      >
+        <PrimaryButton href="/contact">Book a discovery call</PrimaryButton>
+      </PageHero>
+      <section className="sec" data-tone="light">
+        <div className="wrap">
+          <div className="wgrid" style={{ marginTop: 0 }}>
+            {projects.map((p, i) => (
+              <WorkCard key={p.slug} project={p} index={i} headingLevel={2} />
+            ))}
+          </div>
         </div>
       </section>
+      <ClosingCta secondary={{ href: "/services", label: "Explore services" }} />
     </>
   );
 }

@@ -1,45 +1,39 @@
-"use client";
+import Link from "next/link";
+import type { ReactNode } from "react";
 
-import { useRef } from "react";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
+type Crumb = { label: string; href?: string };
 
-type Props = {
+export function PageHero({
+  eyebrow,
+  title,
+  lead,
+  crumbs,
+  children,
+}: {
   eyebrow: string;
   title: string;
-  description: string;
-};
-
-export function PageHero({ eyebrow, title, description }: Props) {
-  const root = useRef<HTMLElement>(null);
-
-  useGSAP(
-    () => {
-      gsap.from(".page-hero-item", {
-        y: 40,
-        opacity: 0,
-        duration: 1,
-        stagger: 0.1,
-        ease: "power4.out",
-      });
-    },
-    { scope: root },
-  );
-
+  lead?: string;
+  crumbs?: Crumb[];
+  children?: ReactNode;
+}) {
   return (
-    <section
-      ref={root}
-      className="relative overflow-hidden mesh-hero px-5 pb-16 pt-32 md:px-8 md:pb-24 md:pt-40"
-    >
-      <div className="pointer-events-none absolute inset-0 grid-fade" />
-      <div className="relative mx-auto max-w-7xl">
-        <p className="page-hero-item mono text-[11px] text-signal">{eyebrow}</p>
-        <h1 className="page-hero-item display mt-4 max-w-4xl text-4xl md:text-7xl">
-          {title}
-        </h1>
-        <p className="page-hero-item mt-6 max-w-xl text-base leading-relaxed text-muted md:text-lg">
-          {description}
-        </p>
+    <section className="phero" data-tone="light">
+      <div className="grid-bg" aria-hidden="true" />
+      <div className="wrap">
+        {crumbs && (
+          <nav className="crumbs" aria-label="Breadcrumb">
+            {crumbs.map((c, i) => (
+              <span key={c.label} style={{ display: "inline-flex", gap: 8 }}>
+                {c.href ? <Link href={c.href}>{c.label}</Link> : <span aria-current="page">{c.label}</span>}
+                {i < crumbs.length - 1 && <span aria-hidden="true">/</span>}
+              </span>
+            ))}
+          </nav>
+        )}
+        <span className="eyebrow">{eyebrow}</span>
+        <h1>{title}</h1>
+        {lead && <p className="lead">{lead}</p>}
+        {children && <div className="acts">{children}</div>}
       </div>
     </section>
   );
