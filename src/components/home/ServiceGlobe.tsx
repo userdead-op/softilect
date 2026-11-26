@@ -6,6 +6,55 @@ import { serviceIcons } from "@/components/ui/Icons";
 
 export type GlobeService = { slug: string; label: string; short: string };
 
+const unit = (v: number[]) => {
+  const l = Math.hypot(v[0], v[1], v[2]);
+  return [v[0] / l, v[1] / l, v[2] / l];
+};
+
+/**
+ * Rhombic dodecahedron with each of its 12 rhombus faces cut into an n by n grid, pushed out onto a sphere.
+ * Gives 12 * n * n closed diamond cells and no triangles.
+ */
+function diamondMesh(n: number) {
+  const pts: number[][] = [];
+  const edges: [number, number][] = [];
+  const seen = new Map<string, number>();
+  const linked = new Set<string>();
+  const id = (p: number[]) => {
+    const q = unit(p), key = q.map((v) => Math.round(v * 1e4)).join(",");
+    let at = seen.get(key);
+    if (at === undefined) { at = pts.length; seen.set(key, at); pts.push(q); }
+    return at;
+  };
+  const link = (a: number, b: number) => {
+    const key = a < b ? `${a}-${b}` : `${b}-${a}`;
+    if (!linked.has(key)) { linked.add(key); edges.push([a, b]); }
+  };
+  const faces: number[][][] = [];
+  for (const sa of [1, -1]) for (const sb of [1, -1]) {
+    faces.push([[2 * sa, 0, 0], [sa, sb, 1], [0, 2 * sb, 0], [sa, sb, -1]]);
+    faces.push([[0, 2 * sa, 0], [1, sa, sb], [0, 0, 2 * sb], [-1, sa, sb]]);
+    faces.push([[0, 0, 2 * sa], [sb, 1, sa], [2 * sb, 0, 0], [sb, -1, sa]]);
+  }
+  for (const f of faces) {
+    const grid: number[][] = [];
+    for (let i = 0; i <= n; i++) {
+      grid[i] = [];
+      for (let j = 0; j <= n; j++) {
+        const s = i / n, t = j / n, p = [0, 0, 0];
+        const w: [number[], number][] = [[f[0], (1 - s) * (1 - t)], [f[1], s * (1 - t)], [f[2], s * t], [f[3], (1 - s) * t]];
+        for (const [c, k] of w) { p[0] += c[0] * k; p[1] += c[1] * k; p[2] += c[2] * k; }
+        grid[i][j] = id(p);
+      }
+    }
+    for (let i = 0; i <= n; i++) for (let j = 0; j <= n; j++) {
+      if (i < n) link(grid[i][j], grid[i + 1][j]);
+      if (j < n) link(grid[i][j], grid[i][j + 1]);
+    }
+  }
+  return { pts, edges };
+}
+
 /** A turning network globe. Service labels ride on it; hover pauses it, drag turns it. */
 export function ServiceGlobe({ items }: { items: GlobeService[] }) {
   const boxRef = useRef<HTMLDivElement>(null);
@@ -21,11 +70,7 @@ export function ServiceGlobe({ items }: { items: GlobeService[] }) {
       for (let i = 0; i < n; i++) { const y = 1 - (i / (n - 1)) * 2, r = Math.sqrt(1 - y * y), t = g * i; out.push([Math.cos(t) * r, y, Math.sin(t) * r]); }
       return out;
     };
-    const pts = fib(220), edges: [number, number][] = [], seen = new Set<string>();
-    pts.forEach((p, i) => {
-      const ds = pts.map((q, j) => [j === i ? Infinity : (p[0] - q[0]) ** 2 + (p[1] - q[1]) ** 2 + (p[2] - q[2]) ** 2, j]).sort((a, b) => a[0] - b[0]);
-      for (let k = 0; k < 3; k++) { const j = ds[k][1], key = i < j ? `${i}-${j}` : `${j}-${i}`; if (!seen.has(key)) { seen.add(key); edges.push([i, j]); } }
-    });
+    const { pts, edges } = diamondMesh(4);
     const anchors = fib(items.length).map((p) => p.map((v) => v * 1.1));
     let W = 0, H = 0, R = 0, rotY = 0.6, rotX = -0.32, speed = 0.0026, target = 0.0026, vY = 0.0026, vX = 0.0009, lastX = 0, lastY = 0, vis = true, raf = 0;
     let drag: { x: number; y: number; ry: number; rx: number } | null = null;

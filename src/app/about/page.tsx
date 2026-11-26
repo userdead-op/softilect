@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { PageHero } from "@/components/ui/PageHero";
 import { PrimaryButton, SecondaryButton } from "@/components/ui/Buttons";
 import { ClosingCta } from "@/components/ui/ClosingCta";
@@ -23,6 +24,12 @@ const principles = [
   { title: "Secure by design", text: "Access control, integrations and threat-minded choices are made early, not bolted on late." },
   { title: "Visible delivery", text: "Working previews, QA gates and honest change control from kickoff to support." },
   { title: "Plain talk", text: "Options and trade-offs explained in simple language, so you always make the call." },
+];
+
+const models = [
+  { t: "Fixed-scope project", d: "Best when the goal is clear. We agree scope, price and timeline up front, then deliver in visible sprints.", href: "/services/custom-software-development", cta: "Custom software" },
+  { t: "Dedicated squad", d: "Designers and engineers working only on your product, growing or shrinking as your needs change.", href: "/services/design-and-development", cta: "Design and development" },
+  { t: "Ongoing support", d: "A monthly plan for monitoring, security updates, fixes and steady improvements after launch.", href: "/services/maintenance-and-support", cta: "Maintenance and support" },
 ];
 
 const sectors = ["Fintech", "Healthcare", "Marketplaces", "Ecommerce", "AI SaaS", "Web3", "Logistics", "Education", "Real estate", "Hospitality"];
@@ -73,9 +80,25 @@ export default function AboutPage() {
         <Ribbon items={[...sectors].reverse()} outline />
       </section>
 
+      <ProcessTeaser title="How we deliver, in nine clear phases." />
+
       <Approach title="Four principles behind every project" items={principles} />
 
-      <ProcessTeaser title="How we deliver, in nine clear phases." />
+      <section className="sec tint" data-tone="light">
+        <div className="wrap">
+          <span className="eyebrow">Working together</span>
+          <h2 className="h2">Three ways to work with us.</h2>
+          <div className="facts">
+            {models.map((m, i) => (
+              <Reveal key={m.t} index={i}>
+                <h3>{m.t}</h3>
+                <p>{m.d}</p>
+                <Link className="inl" href={m.href}>{m.cta}</Link>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <ClosingCta title="Tell us what you want to build." />
     </>

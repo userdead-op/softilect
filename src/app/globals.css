@@ -742,3 +742,5 @@ img { max-width: 100%; }
 .stor h2 span { display: block; margin-bottom: 14px; font: 700 12px/1 var(--fig); letter-spacing: 0.14em; color: var(--mint-deep); }
 .stor p { margin: 0; font-size: 19px; line-height: 1.6; color: var(--soft); max-width: 60ch; }
 @media (max-width: 900px) { .stor > div { grid-template-columns: minmax(0, 1fr); gap: 16px; } }
+.inl { display: inline-flex; margin-top: 14px; font: 600 14px/1 var(--fig); color: var(--mint-deep); border-bottom: 1px solid currentColor; padding-bottom: 3px; transition: padding 0.3s var(--ease); }
+.inl:hover { padding-right: 6px; }

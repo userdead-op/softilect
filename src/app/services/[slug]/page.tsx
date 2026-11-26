@@ -164,9 +164,9 @@ export default async function ServiceDetailPage({ params }: Props) {
         </section>
       )}
 
-      {deep && <Faq faq={deep.faq} />}
+      {deep && <Faq faq={deep.faq} tone={caseStudies.length > 0 ? "pure" : "tint"} />}
 
-      <section className="sec pure relsec" data-tone="light">
+      <section className={`sec ${deep && caseStudies.length === 0 ? "pure" : "tint"} relsec`} data-tone="light">
         <div className="wrap">
           <span className="eyebrow">Keep exploring</span>
           <h2 className="h2">Services that pair well with {service.name.toLowerCase()}.</h2>
